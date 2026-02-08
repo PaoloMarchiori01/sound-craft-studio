@@ -8,7 +8,7 @@ interface Service {
   icon: React.ReactNode;
   description: string;
   showPlayer: boolean;
-  media: { type: "audio" | "video"; title: string; src: string }[];
+  media: { type: "audio" | "video"; title: string; src: string; poster?: string }[];
 }
 
 const services: Service[] = [
@@ -19,7 +19,8 @@ const services: Service[] = [
     description: "Il mixing è l'arte di bilanciare tutti gli elementi di una traccia - voci, strumenti, effetti - per creare un suono coeso e professionale. Il mastering è il tocco finale che ottimizza il brano per la distribuzione, garantendo che suoni perfetto su qualsiasi sistema di riproduzione. Questo processo trasforma una buona registrazione in un prodotto pronto per le radio e le piattaforme di streaming.",
     showPlayer: true,
     media: [
-      { type: "audio", title: "Tall Heights - Spirit Cold", src: "https://kelcwwdvzqgehcyssojd.supabase.co/storage/v1/object/public/fileaudio/Tall%20Heights%20-%20Spirit%20Cold.mp3" },
+      { type: "audio", title: "Tall Heights - Spirit Cold", src: "/audio/Tall Heights - Spirit Cold.mp3" },
+      // Per un tuo MP3: metti il file in public/audio/ e usa src: "/audio/nome-file.mp3"
       { type: "audio", title: "Mastering Example - Rock", src: "" },
       { type: "audio", title: "Full Production - Electronic", src: "" },
     ],
@@ -28,7 +29,7 @@ const services: Service[] = [
     id: "produzioni",
     title: "Produzioni Complete",
     icon: <Headphones className="w-6 h-6" />,
-    description: "Dalla prima idea alla traccia completa. Mi occupo di tutto il processo produttivo: composizione, arrangiamento, scelta dei suoni e delle sonorità. Che tu sia un artista emergente con una melodia in testa o un professionista che cerca un sound specifico, ti accompagno in ogni fase della creazione musicale.",
+    description: "Dalla prima idea alla traccia completa. Mi occupo di tutto il processo produttivo: composizione, arrangiamento, scelta dei suoni, organizzazione dei musicisti e delle sessioni in studio. Che tu sia un artista emergente con una melodia in testa o un professionista che cerca un sound specifico, ti accompagno in ogni fase della creazione musicale.",
     showPlayer: true,
     media: [
       { type: "audio", title: "Produzione Originale - Hip Hop", src: "" },
@@ -39,19 +40,20 @@ const services: Service[] = [
     id: "branding",
     title: "Sound Branding",
     icon: <Radio className="w-6 h-6" />,
-    description: "L'identità sonora del tuo brand è fondamentale quanto il logo. Creo jingle, sound logo, musiche di attesa e colonne sonore che rendono il tuo marchio immediatamente riconoscibile. Dal suono di notifica della tua app alla musica del tuo spot pubblicitario.",
+    description: "L'identità sonora del tuo brand è fondamentale quanto quella visiva. Creo jingle, sonorizzazioni per pubblicità e loghi sonori per rendere il tuo marchio riconoscibile.",
     showPlayer: true,
     media: [
-      { type: "audio", title: "Jingle Aziendale", src: "" },
-      { type: "audio", title: "Sound Logo", src: "" },
-      { type: "video", title: "Spot TV", src: "" },
+      // Video: src = file .mp4 in public/video/. Anteprima: poster = immagine in public/video/ (es. poster: "/video/anteprima-balenciaga.jpg")
+      { type: "video", title: "Bang & Olufsen X Balenciaga_Audio Re-Design_(Portfolio Purposes)", src: "/video/Balenciaga.mp4", poster: "/video/anteprima-balenciaga.png" },
+      { type: "video", title: "Sound Logo", src: "", poster: "" },
+      { type: "video", title: "Spot TV", src: "", poster: "" },
     ],
   },
   {
     id: "registrazioni",
     title: "Registrazioni in Studio",
     icon: <Mic className="w-6 h-6" />,
-    description: "Sessioni di registrazione professionali in uno studio attrezzato con le migliori tecnologie. Che tu debba registrare voce, strumenti acustici o una band intera, offro un ambiente confortevole e tecnica di prim'ordine per catturare la tua performance al meglio.",
+    description: "Grazie alla partnership con L’n’R Production, offro registrazioni vocali di altissima qualità, in uno studio di alto livello acustico, progettato secondo la tecnologia L.E.D.E. ed equipaggiato con le migliori macchine da studio. Vieni a registrare nello stesso vocal booth che hanno utilizzato i nomi più iconici della musica italiana!",
     showPlayer: false,
     media: [],
   },
@@ -59,7 +61,7 @@ const services: Service[] = [
     id: "podcast",
     title: "Podcast",
     icon: <Podcast className="w-6 h-6" />,
-    description: "Produzione completa per podcast: dalla registrazione all'editing, dal mix alla post-produzione. Elimino rumori di fondo, bilancio le voci, aggiungo intro/outro e musiche di sottofondo. Il risultato è un podcast dal suono professionale che tiene incollati gli ascoltatori.",
+    description: "Produzione completa per podcast: dalla registrazione - in studio o a domicilio - all'editing, fino a mix e mastering finale. Elimino rumori di fondo, bilancio le voci, aggiungo intro/outro e musiche di sottofondo. Il risultato è un podcast dal suono professionale che tiene incollati gli ascoltatori.",
     showPlayer: false,
     media: [],
   },
@@ -67,7 +69,7 @@ const services: Service[] = [
     id: "altro",
     title: "Altro",
     icon: <MoreHorizontal className="w-6 h-6" />,
-    description: "Offro anche una serie di servizi specializzati per esigenze specifiche:\n\n• Ristrutturazione Audio: Recupero e miglioramento di registrazioni danneggiate, vecchie o di bassa qualità.\n\n• Editing Audio: Pulizia da rumori di fondo, ristrutturazione del suono e intonazione delle voci per risultati professionali.\n\n• Audiolibri: Produzione completa per audiolibri, dalla registrazione alla post-produzione, con qualità broadcast.\n\n• Fonico Live: Servizio di fonica per eventi dal vivo, concerti e manifestazioni, garantendo un suono perfetto per ogni occasione.",
+    description: "• Ristrutturazione Audio: Recupero e miglioramento di registrazioni danneggiate, vecchie o di bassa qualità.\n\n• Editing Audio: Pulizia da rumori di fondo, quantizzazione e intonazione delle voci.\n\n• Audiolibri: Produzione completa per audiolibri, dalla registrazione alla post-produzione, con qualità broadcast.\n\n• Fonico Live: Servizio di fonica per eventi dal vivo, concerti e manifestazioni, garantendo un suono perfetto per ogni occasione.",
     showPlayer: false,
     media: [],
   },
@@ -79,6 +81,7 @@ const MediaPlayer = ({ media }: { media: { type: string; title: string; src: str
   const [progress, setProgress] = useState(0);
   const [duration, setDuration] = useState(0);
   const audioRef = useRef<HTMLAudioElement>(null);
+  const progressBarRef = useRef<HTMLDivElement>(null);
 
   const currentMedia = media[currentIndex];
   const hasAudioSrc = currentMedia.src && currentMedia.src.length > 0;
@@ -123,6 +126,17 @@ const MediaPlayer = ({ media }: { media: { type: string; title: string; src: str
   const handleEnded = () => {
     setIsPlaying(false);
     setProgress(0);
+  };
+
+  const handleProgressClick = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (!progressBarRef.current || !audioRef.current || !hasAudioSrc) return;
+    const dur = audioRef.current.duration;
+    if (!Number.isFinite(dur) || dur <= 0) return;
+    const rect = progressBarRef.current.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const percent = Math.max(0, Math.min(1, x / rect.width));
+    audioRef.current.currentTime = percent * dur;
+    setProgress(percent * 100);
   };
 
   useEffect(() => {
@@ -199,10 +213,146 @@ const MediaPlayer = ({ media }: { media: { type: string; title: string; src: str
         </button>
       </div>
 
-      {/* Progress bar */}
-      <div className="mt-4 h-1 bg-muted rounded-full overflow-hidden">
+      {/* Progress bar (cliccabile per cercare) */}
+      <div
+        ref={progressBarRef}
+        role="slider"
+        aria-label="Posizione nella traccia"
+        tabIndex={0}
+        onClick={handleProgressClick}
+        className="mt-4 h-2 bg-muted rounded-full overflow-hidden cursor-pointer"
+      >
         <div
-          className="h-full bg-gradient-to-r from-primary to-accent transition-all duration-100"
+          className="h-full bg-gradient-to-r from-primary to-accent transition-all duration-100 pointer-events-none"
+          style={{ width: `${progress}%` }}
+        />
+      </div>
+    </div>
+  );
+};
+
+const VideoPlayer = ({ media }: { media: { type: string; title: string; src: string; poster?: string }[] }) => {
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [progress, setProgress] = useState(0);
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const progressBarRef = useRef<HTMLDivElement>(null);
+
+  const currentMedia = media[currentIndex];
+  const hasVideoSrc = currentMedia.src && currentMedia.src.length > 0;
+
+  const next = () => {
+    setCurrentIndex((prev) => (prev + 1) % media.length);
+    setIsPlaying(false);
+    setProgress(0);
+  };
+
+  const prev = () => {
+    setCurrentIndex((prev) => (prev - 1 + media.length) % media.length);
+    setIsPlaying(false);
+    setProgress(0);
+  };
+
+  const togglePlay = () => {
+    if (!videoRef.current || !hasVideoSrc) return;
+    if (isPlaying) {
+      videoRef.current.pause();
+    } else {
+      videoRef.current.play();
+    }
+    setIsPlaying(!isPlaying);
+  };
+
+  const handleTimeUpdate = () => {
+    if (videoRef.current) {
+      const current = videoRef.current.currentTime;
+      const total = videoRef.current.duration;
+      setProgress(total > 0 ? (current / total) * 100 : 0);
+    }
+  };
+
+  const handleEnded = () => {
+    setIsPlaying(false);
+    setProgress(0);
+  };
+
+  const handleProgressClick = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (!progressBarRef.current || !videoRef.current || !hasVideoSrc) return;
+    const dur = videoRef.current.duration;
+    if (!Number.isFinite(dur) || dur <= 0) return;
+    const rect = progressBarRef.current.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const percent = Math.max(0, Math.min(1, x / rect.width));
+    videoRef.current.currentTime = percent * dur;
+    setProgress(percent * 100);
+  };
+
+  useEffect(() => {
+    if (videoRef.current) {
+      videoRef.current.pause();
+      videoRef.current.currentTime = 0;
+      setIsPlaying(false);
+      setProgress(0);
+    }
+  }, [currentIndex]);
+
+  return (
+    <div className="audio-player-glass mt-4">
+      {hasVideoSrc && (
+        <video
+          ref={videoRef}
+          src={currentMedia.src}
+          poster={currentMedia.poster || undefined}
+          className="w-full aspect-video rounded-xl object-cover mb-4 bg-muted"
+          onTimeUpdate={handleTimeUpdate}
+          onEnded={handleEnded}
+          onClick={togglePlay}
+          playsInline
+        />
+      )}
+
+      <div className="flex items-center justify-between mb-3">
+        <span className="text-sm text-muted-foreground">
+          {currentIndex + 1} / {media.length}
+        </span>
+        <span className="text-sm font-medium text-foreground">
+          {media[currentIndex].title}
+        </span>
+      </div>
+
+      <div className="flex items-center justify-center gap-6">
+        <button
+          onClick={prev}
+          className="p-2 rounded-full transition-all duration-300 hover:bg-primary/20"
+        >
+          <ChevronLeft className="w-5 h-5" />
+        </button>
+        <button
+          onClick={togglePlay}
+          className={`glass-button p-4 rounded-full ${!hasVideoSrc ? "opacity-50 cursor-not-allowed" : ""}`}
+          disabled={!hasVideoSrc}
+        >
+          {isPlaying ? <Pause className="w-6 h-6" /> : <Play className="w-6 h-6 ml-0.5" />}
+        </button>
+        <button
+          onClick={next}
+          className="p-2 rounded-full transition-all duration-300 hover:bg-primary/20"
+        >
+          <ChevronRight className="w-5 h-5" />
+        </button>
+      </div>
+
+      {/* Progress bar (cliccabile per cercare) */}
+      <div
+        ref={progressBarRef}
+        role="slider"
+        aria-label="Posizione nel video"
+        tabIndex={0}
+        onClick={handleProgressClick}
+        className="mt-4 h-2 bg-muted rounded-full overflow-hidden cursor-pointer"
+      >
+        <div
+          className="h-full bg-gradient-to-r from-primary to-accent transition-all duration-100 pointer-events-none"
           style={{ width: `${progress}%` }}
         />
       </div>
@@ -253,7 +403,11 @@ const ServiceCard = ({ service }: { service: Service }) => {
               {service.description}
             </p>
             {service.showPlayer && service.media.length > 0 && (
-              <MediaPlayer media={service.media} />
+              service.id === "branding" ? (
+                <VideoPlayer media={service.media} />
+              ) : (
+                <MediaPlayer media={service.media} />
+              )
             )}
           </motion.div>
         )}

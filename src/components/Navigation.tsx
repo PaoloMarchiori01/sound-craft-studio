@@ -42,10 +42,14 @@ const Navigation = () => {
               e.preventDefault();
               window.scrollTo({ top: 0, behavior: "smooth" });
             }}
-            className="text-xl font-bold"
+            className="flex items-center justify-center focus:outline-none"
           >
-            <span className="text-gradient">PM</span>
-            <span className="text-foreground ml-1 hidden sm:inline">Audio</span>
+            {/* Altezza logo: h-10 = 40px, h-12 = 48px, h-14 = 56px. Cambia questi valori per ridimensionare. */}
+            <img
+              src="/logo.png"
+              alt="PM Audio"
+              className="h-12 sm:h-14 w-auto object-contain"
+            />
           </a>
 
           {/* Desktop Navigation */}

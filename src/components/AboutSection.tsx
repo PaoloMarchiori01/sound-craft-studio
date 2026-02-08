@@ -1,18 +1,8 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { useState } from "react";
-import { ChevronDown, Award, Music, Building2 } from "lucide-react";
+import { ChevronDown } from "lucide-react";
 const AboutSection = () => {
   const [isExpanded, setIsExpanded] = useState(false);
-  const highlights = [{
-    icon: <Music className="w-5 h-5" />,
-    text: "Batterista dal 2008"
-  }, {
-    icon: <Award className="w-5 h-5" />,
-    text: "Certificato NAM Milano"
-  }, {
-    icon: <Building2 className="w-5 h-5" />,
-    text: "L'n'R Production"
-  }];
   return <section id="chi-sono" className="section-container">
       <div className="max-w-4xl mx-auto">
         <motion.div initial={{
@@ -43,19 +33,6 @@ const AboutSection = () => {
         duration: 0.6,
         delay: 0.2
       }} className="glass-strong rounded-3xl p-8 md:p-12">
-          {/* Highlights */}
-          <div className="flex flex-wrap justify-center gap-4 mb-8">
-            {highlights.map((item, index) => (
-              <div
-                key={index}
-                className="flex items-center gap-2 px-4 py-2 rounded-full bg-primary/20 text-primary"
-              >
-                {item.icon}
-                <span className="text-sm font-medium">{item.text}</span>
-              </div>
-            ))}
-          </div>
-
           {/* Bio text */}
           <div className="text-muted-foreground leading-relaxed space-y-4">
             <p>
@@ -69,7 +46,7 @@ const AboutSection = () => {
               All'età di 14 anni, grazie a un contratto con la label tedesca 
               'New Joker Staff', ho potuto esibirmi come DJ in diverse località di prestigio, 
               come il <span className="text-primary font-medium">Café del Mar di Ibiza</span> e 
-              il <span className="text-primary font-medium">Blue di Cortina D'Ampezzo</span>.
+              il <span className="text-primary font-medium">Blue Club di Cortina D'Ampezzo</span>.
             </p>
 
             <AnimatePresence>

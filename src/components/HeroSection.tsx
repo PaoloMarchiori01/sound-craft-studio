@@ -26,7 +26,7 @@ const HeroSection = () => {
           transition={{ duration: 0.8, delay: 0.2 }}
         >
           <h2 className="text-lg md:text-xl font-medium text-primary mb-4 tracking-widest uppercase">
-            Sound Engineer
+            Producer & Sound Engineer
           </h2>
         </motion.div>
         
