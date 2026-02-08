@@ -1,12 +1,13 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { useState } from "react";
-import { ChevronDown, Music, Mic, Radio, Headphones, Podcast, ChevronLeft, ChevronRight, Play, Pause } from "lucide-react";
+import { ChevronDown, Music, Mic, Radio, Headphones, Podcast, ChevronLeft, ChevronRight, Play, Pause, MoreHorizontal } from "lucide-react";
 
 interface Service {
   id: string;
   title: string;
   icon: React.ReactNode;
   description: string;
+  showPlayer: boolean;
   media: { type: "audio" | "video"; title: string; src: string }[];
 }
 
@@ -16,6 +17,7 @@ const services: Service[] = [
     title: "Mixing & Mastering",
     icon: <Music className="w-6 h-6" />,
     description: "Il mixing è l'arte di bilanciare tutti gli elementi di una traccia - voci, strumenti, effetti - per creare un suono coeso e professionale. Il mastering è il tocco finale che ottimizza il brano per la distribuzione, garantendo che suoni perfetto su qualsiasi sistema di riproduzione. Questo processo trasforma una buona registrazione in un prodotto pronto per le radio e le piattaforme di streaming.",
+    showPlayer: true,
     media: [
       { type: "audio", title: "Before/After Mix - Pop", src: "" },
       { type: "audio", title: "Mastering Example - Rock", src: "" },
@@ -27,6 +29,7 @@ const services: Service[] = [
     title: "Produzioni Complete",
     icon: <Headphones className="w-6 h-6" />,
     description: "Dalla prima idea alla traccia completa. Mi occupo di tutto il processo produttivo: composizione, arrangiamento, scelta dei suoni e delle sonorità. Che tu sia un artista emergente con una melodia in testa o un professionista che cerca un sound specifico, ti accompagno in ogni fase della creazione musicale.",
+    showPlayer: true,
     media: [
       { type: "audio", title: "Produzione Originale - Hip Hop", src: "" },
       { type: "audio", title: "Arrangiamento Orchestrale", src: "" },
@@ -37,6 +40,7 @@ const services: Service[] = [
     title: "Sound Branding",
     icon: <Radio className="w-6 h-6" />,
     description: "L'identità sonora del tuo brand è fondamentale quanto il logo. Creo jingle, sound logo, musiche di attesa e colonne sonore che rendono il tuo marchio immediatamente riconoscibile. Dal suono di notifica della tua app alla musica del tuo spot pubblicitario.",
+    showPlayer: true,
     media: [
       { type: "audio", title: "Jingle Aziendale", src: "" },
       { type: "audio", title: "Sound Logo", src: "" },
@@ -48,20 +52,24 @@ const services: Service[] = [
     title: "Registrazioni in Studio",
     icon: <Mic className="w-6 h-6" />,
     description: "Sessioni di registrazione professionali in uno studio attrezzato con le migliori tecnologie. Che tu debba registrare voce, strumenti acustici o una band intera, offro un ambiente confortevole e tecnica di prim'ordine per catturare la tua performance al meglio.",
-    media: [
-      { type: "audio", title: "Session Voce", src: "" },
-      { type: "audio", title: "Recording Chitarra Acustica", src: "" },
-    ],
+    showPlayer: false,
+    media: [],
   },
   {
     id: "podcast",
     title: "Podcast",
     icon: <Podcast className="w-6 h-6" />,
     description: "Produzione completa per podcast: dalla registrazione all'editing, dal mix alla post-produzione. Elimino rumori di fondo, bilancio le voci, aggiungo intro/outro e musiche di sottofondo. Il risultato è un podcast dal suono professionale che tiene incollati gli ascoltatori.",
-    media: [
-      { type: "audio", title: "Podcast Example - Before", src: "" },
-      { type: "audio", title: "Podcast Example - After", src: "" },
-    ],
+    showPlayer: false,
+    media: [],
+  },
+  {
+    id: "altro",
+    title: "Altro",
+    icon: <MoreHorizontal className="w-6 h-6" />,
+    description: "Offro anche una serie di servizi specializzati per esigenze specifiche:\n\n• Ristrutturazione Audio: Recupero e miglioramento di registrazioni danneggiate, vecchie o di bassa qualità.\n\n• Editing Audio: Pulizia da rumori di fondo, ristrutturazione del suono e intonazione delle voci per risultati professionali.\n\n• Audiolibri: Produzione completa per audiolibri, dalla registrazione alla post-produzione, con qualità broadcast.\n\n• Fonico Live: Servizio di fonica per eventi dal vivo, concerti e manifestazioni, garantendo un suono perfetto per ogni occasione.",
+    showPlayer: false,
+    media: [],
   },
 ];
 
@@ -177,10 +185,12 @@ const ServiceCard = ({ service }: { service: Service }) => {
             transition={{ duration: 0.3 }}
             className="overflow-hidden"
           >
-            <p className="mt-4 text-muted-foreground leading-relaxed">
+            <p className="mt-4 text-muted-foreground leading-relaxed whitespace-pre-line">
               {service.description}
             </p>
-            <MediaPlayer media={service.media} />
+            {service.showPlayer && service.media.length > 0 && (
+              <MediaPlayer media={service.media} />
+            )}
           </motion.div>
         )}
       </AnimatePresence>
