@@ -19,7 +19,7 @@ const services: Service[] = [
     description: "Il mixing è l'arte di bilanciare tutti gli elementi di una traccia - voci, strumenti, effetti - per creare un suono coeso e professionale. Il mastering è il tocco finale che ottimizza il brano per la distribuzione, garantendo che suoni perfetto su qualsiasi sistema di riproduzione. Questo processo trasforma una buona registrazione in un prodotto pronto per le radio e le piattaforme di streaming.",
     showPlayer: true,
     media: [
-      { type: "audio", title: "Tall Heights - Spirit Cold", src: "/audio/Tall Heights - Spirit Cold.mp3" },
+      { type: "audio", title: "Tall Heights - Spirit Cold", src: "https://res.cloudinary.com/dr2vcd5so/video/upload/v1770566267/Tall_Heights_-_Spirit_Cold_liknxl.mp3" },
       // Per un tuo MP3: metti il file in public/audio/ e usa src: "/audio/nome-file.mp3"
       { type: "audio", title: "Mastering Example - Rock", src: "" },
       { type: "audio", title: "Full Production - Electronic", src: "" },
@@ -44,7 +44,7 @@ const services: Service[] = [
     showPlayer: true,
     media: [
       // Video: src = file .mp4 in public/video/. Anteprima: poster = immagine in public/video/ (es. poster: "/video/anteprima-balenciaga.jpg")
-      { type: "video", title: "Bang & Olufsen X Balenciaga_Audio Re-Design_(Portfolio Purposes)", src: "/video/Balenciaga.mp4", poster: "/video/anteprima-balenciaga.png" },
+      { type: "video", title: "Bang & Olufsen X Balenciaga_Audio Re-Design_(Portfolio Purposes)", src: "https://res.cloudinary.com/dr2vcd5so/video/upload/v1770566564/Balenciaga_n5x42v.mp4", poster: "https://res.cloudinary.com/dr2vcd5so/image/upload/v1770566569/anteprima-balenciaga_sxanfo.png" },
       { type: "video", title: "Sound Logo", src: "", poster: "" },
       { type: "video", title: "Spot TV", src: "", poster: "" },
     ],

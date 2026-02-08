@@ -46,7 +46,7 @@ const Navigation = () => {
           >
             {/* Altezza logo: h-10 = 40px, h-12 = 48px, h-14 = 56px. Cambia questi valori per ridimensionare. */}
             <img
-              src="/logo.png"
+              src="https://res.cloudinary.com/dr2vcd5so/image/upload/v1770566574/logo_mwc3q7.png"
               alt="PM Audio"
               className="h-12 sm:h-14 w-auto object-contain"
             />
