@@ -1,7 +1,24 @@
 import { motion } from "framer-motion";
 import { useState } from "react";
-import { Mail, Phone, Instagram, Facebook, Linkedin, Send, Check } from "lucide-react";
+import { Mail, Phone, Instagram, Facebook, Linkedin, Send, Check, ChevronDown } from "lucide-react";
 import { toast } from "sonner";
+
+const TikTokIcon = () => (
+  <svg className="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
+    <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64 2.93 2.93 0 0 1 .88.13V9.4a6.84 6.84 0 0 0-1-.05A6.33 6.33 0 0 0 5 20.1a6.34 6.34 0 0 0 10.86-4.43v-7a8.16 8.16 0 0 0 4.77 1.52v-3.4a4.85 4.85 0 0 1-1-.1z"/>
+  </svg>
+);
+
+const MAKE_WEBHOOK_URL = "https://hook.eu1.make.com/uyneng912vro753cdnkfhkvn985mh3zv";
+
+const serviceOptions = [
+  "Mixing & Mastering",
+  "Produzioni Complete",
+  "Sound Branding",
+  "Registrazioni in Studio",
+  "Podcast",
+  "Altro",
+];
 
 const ContactSection = () => {
   const [formData, setFormData] = useState({
@@ -9,12 +26,13 @@ const ContactSection = () => {
     cognome: "",
     email: "",
     cellulare: "",
+    servizio: "",
     messaggio: "",
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
@@ -22,24 +40,46 @@ const ContactSection = () => {
     e.preventDefault();
     setIsSubmitting(true);
     
-    // Simulate form submission
-    await new Promise((resolve) => setTimeout(resolve, 1500));
-    
-    setIsSubmitting(false);
-    setIsSubmitted(true);
-    toast.success("Messaggio inviato con successo! Ti risponderò al più presto.");
-    
-    // Reset after animation
-    setTimeout(() => {
-      setIsSubmitted(false);
-      setFormData({ nome: "", cognome: "", email: "", cellulare: "", messaggio: "" });
-    }, 3000);
+    try {
+      // Send data to Make.com webhook
+      await fetch(MAKE_WEBHOOK_URL, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        mode: "no-cors",
+        body: JSON.stringify({
+          nome: formData.nome.trim(),
+          cognome: formData.cognome.trim(),
+          email: formData.email.trim(),
+          cellulare: formData.cellulare.trim() || null,
+          servizio: formData.servizio,
+          messaggio: formData.messaggio.trim(),
+          timestamp: new Date().toISOString(),
+        }),
+      });
+
+      setIsSubmitting(false);
+      setIsSubmitted(true);
+      toast.success("Messaggio inviato con successo! Ti risponderò al più presto.");
+      
+      // Reset after animation
+      setTimeout(() => {
+        setIsSubmitted(false);
+        setFormData({ nome: "", cognome: "", email: "", cellulare: "", servizio: "", messaggio: "" });
+      }, 3000);
+    } catch (error) {
+      console.error("Error sending form:", error);
+      setIsSubmitting(false);
+      toast.error("Errore nell'invio del messaggio. Riprova più tardi.");
+    }
   };
 
   const socialLinks = [
     { icon: <Instagram className="w-5 h-5" />, href: "#", label: "Instagram" },
     { icon: <Facebook className="w-5 h-5" />, href: "#", label: "Facebook" },
     { icon: <Linkedin className="w-5 h-5" />, href: "#", label: "LinkedIn" },
+    { icon: <TikTokIcon />, href: "#", label: "TikTok" },
   ];
 
   return (
@@ -131,9 +171,9 @@ const ContactSection = () => {
             <h3 className="text-2xl font-semibold mb-6">Invia un Messaggio</h3>
             
             <div className="grid sm:grid-cols-2 gap-4 mb-4">
-              <div>
+              <div className="relative">
                 <label htmlFor="nome" className="block text-sm text-muted-foreground mb-2">
-                  Nome
+                  Nome *
                 </label>
                 <input
                   type="text"
@@ -142,13 +182,14 @@ const ContactSection = () => {
                   value={formData.nome}
                   onChange={handleChange}
                   required
-                  className="input-glass"
+                  maxLength={100}
+                  className="input-glass w-full"
                   placeholder="Il tuo nome"
                 />
               </div>
-              <div>
+              <div className="relative">
                 <label htmlFor="cognome" className="block text-sm text-muted-foreground mb-2">
-                  Cognome
+                  Cognome *
                 </label>
                 <input
                   type="text"
@@ -157,16 +198,17 @@ const ContactSection = () => {
                   value={formData.cognome}
                   onChange={handleChange}
                   required
-                  className="input-glass"
+                  maxLength={100}
+                  className="input-glass w-full"
                   placeholder="Il tuo cognome"
                 />
               </div>
             </div>
 
             <div className="grid sm:grid-cols-2 gap-4 mb-4">
-              <div>
+              <div className="relative">
                 <label htmlFor="email" className="block text-sm text-muted-foreground mb-2">
-                  Email
+                  Email *
                 </label>
                 <input
                   type="email"
@@ -175,13 +217,14 @@ const ContactSection = () => {
                   value={formData.email}
                   onChange={handleChange}
                   required
-                  className="input-glass"
+                  maxLength={255}
+                  className="input-glass w-full"
                   placeholder="email@esempio.com"
                 />
               </div>
-              <div>
+              <div className="relative">
                 <label htmlFor="cellulare" className="block text-sm text-muted-foreground mb-2">
-                  Cellulare
+                  Cellulare <span className="text-muted-foreground/50">(opzionale)</span>
                 </label>
                 <input
                   type="tel"
@@ -189,15 +232,40 @@ const ContactSection = () => {
                   name="cellulare"
                   value={formData.cellulare}
                   onChange={handleChange}
-                  className="input-glass"
+                  maxLength={20}
+                  className="input-glass w-full"
                   placeholder="+39 XXX XXX XXXX"
                 />
               </div>
             </div>
 
-            <div className="mb-6">
+            <div className="mb-4 relative">
+              <label htmlFor="servizio" className="block text-sm text-muted-foreground mb-2">
+                Servizio *
+              </label>
+              <div className="relative">
+                <select
+                  id="servizio"
+                  name="servizio"
+                  value={formData.servizio}
+                  onChange={handleChange}
+                  required
+                  className="input-glass w-full appearance-none cursor-pointer pr-10"
+                >
+                  <option value="" disabled>Seleziona un servizio</option>
+                  {serviceOptions.map((option) => (
+                    <option key={option} value={option} className="bg-background text-foreground">
+                      {option}
+                    </option>
+                  ))}
+                </select>
+                <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground pointer-events-none" />
+              </div>
+            </div>
+
+            <div className="mb-6 relative">
               <label htmlFor="messaggio" className="block text-sm text-muted-foreground mb-2">
-                Messaggio
+                Messaggio *
               </label>
               <textarea
                 id="messaggio"
@@ -205,8 +273,9 @@ const ContactSection = () => {
                 value={formData.messaggio}
                 onChange={handleChange}
                 required
+                maxLength={2000}
                 rows={5}
-                className="input-glass resize-none"
+                className="input-glass w-full resize-none"
                 placeholder="Raccontami del tuo progetto..."
               />
             </div>
