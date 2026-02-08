@@ -1,5 +1,5 @@
+import React, { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { useState } from "react";
 import { ChevronDown, Music, Mic, Radio, Headphones, Podcast, ChevronLeft, ChevronRight, Play, Pause, MoreHorizontal } from "lucide-react";
 
 interface Service {
@@ -19,7 +19,7 @@ const services: Service[] = [
     description: "Il mixing è l'arte di bilanciare tutti gli elementi di una traccia - voci, strumenti, effetti - per creare un suono coeso e professionale. Il mastering è il tocco finale che ottimizza il brano per la distribuzione, garantendo che suoni perfetto su qualsiasi sistema di riproduzione. Questo processo trasforma una buona registrazione in un prodotto pronto per le radio e le piattaforme di streaming.",
     showPlayer: true,
     media: [
-      { type: "audio", title: "Before/After Mix - Pop", src: "" },
+      { type: "audio", title: "Tall Heights - Spirit Cold", src: "https://kelcwwdvzqgehcyssojd.supabase.co/storage/v1/object/public/fileaudio/Tall%20Heights%20-%20Spirit%20Cold.mp3" },
       { type: "audio", title: "Mastering Example - Rock", src: "" },
       { type: "audio", title: "Full Production - Electronic", src: "" },
     ],
@@ -73,15 +73,79 @@ const services: Service[] = [
   },
 ];
 
-const MediaPlayer = ({ media }: { media: { type: string; title: string }[] }) => {
+const MediaPlayer = ({ media }: { media: { type: string; title: string; src: string }[] }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isPlaying, setIsPlaying] = useState(false);
+  const [progress, setProgress] = useState(0);
+  const [duration, setDuration] = useState(0);
+  const audioRef = useRef<HTMLAudioElement>(null);
 
-  const next = () => setCurrentIndex((prev) => (prev + 1) % media.length);
-  const prev = () => setCurrentIndex((prev) => (prev - 1 + media.length) % media.length);
+  const currentMedia = media[currentIndex];
+  const hasAudioSrc = currentMedia.src && currentMedia.src.length > 0;
+
+  const next = () => {
+    setCurrentIndex((prev) => (prev + 1) % media.length);
+    setIsPlaying(false);
+    setProgress(0);
+  };
+  
+  const prev = () => {
+    setCurrentIndex((prev) => (prev - 1 + media.length) % media.length);
+    setIsPlaying(false);
+    setProgress(0);
+  };
+
+  const togglePlay = () => {
+    if (!audioRef.current || !hasAudioSrc) return;
+    
+    if (isPlaying) {
+      audioRef.current.pause();
+    } else {
+      audioRef.current.play();
+    }
+    setIsPlaying(!isPlaying);
+  };
+
+  const handleTimeUpdate = () => {
+    if (audioRef.current) {
+      const current = audioRef.current.currentTime;
+      const total = audioRef.current.duration;
+      setProgress((current / total) * 100);
+    }
+  };
+
+  const handleLoadedMetadata = () => {
+    if (audioRef.current) {
+      setDuration(audioRef.current.duration);
+    }
+  };
+
+  const handleEnded = () => {
+    setIsPlaying(false);
+    setProgress(0);
+  };
+
+  useEffect(() => {
+    if (audioRef.current) {
+      audioRef.current.pause();
+      audioRef.current.currentTime = 0;
+      setIsPlaying(false);
+      setProgress(0);
+    }
+  }, [currentIndex]);
 
   return (
     <div className="audio-player-glass mt-4">
+      {hasAudioSrc && (
+        <audio
+          ref={audioRef}
+          src={currentMedia.src}
+          onTimeUpdate={handleTimeUpdate}
+          onLoadedMetadata={handleLoadedMetadata}
+          onEnded={handleEnded}
+        />
+      )}
+      
       <div className="flex items-center justify-between mb-3">
         <span className="text-sm text-muted-foreground">
           {currentIndex + 1} / {media.length}
@@ -120,8 +184,9 @@ const MediaPlayer = ({ media }: { media: { type: string; title: string }[] }) =>
         </button>
         
         <button
-          onClick={() => setIsPlaying(!isPlaying)}
-          className="glass-button p-4 rounded-full"
+          onClick={togglePlay}
+          className={`glass-button p-4 rounded-full ${!hasAudioSrc ? 'opacity-50 cursor-not-allowed' : ''}`}
+          disabled={!hasAudioSrc}
         >
           {isPlaying ? <Pause className="w-6 h-6" /> : <Play className="w-6 h-6 ml-0.5" />}
         </button>
@@ -136,10 +201,9 @@ const MediaPlayer = ({ media }: { media: { type: string; title: string }[] }) =>
 
       {/* Progress bar */}
       <div className="mt-4 h-1 bg-muted rounded-full overflow-hidden">
-        <motion.div
-          className="h-full bg-gradient-to-r from-primary to-accent"
-          animate={{ width: isPlaying ? "100%" : "0%" }}
-          transition={{ duration: 30, ease: "linear" }}
+        <div
+          className="h-full bg-gradient-to-r from-primary to-accent transition-all duration-100"
+          style={{ width: `${progress}%` }}
         />
       </div>
     </div>
