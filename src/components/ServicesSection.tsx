@@ -24,7 +24,7 @@ const services: Service[] = [
   },
   {
     id: "produzioni",
-    title: "Produzioni",
+    title: "Produzioni Complete",
     icon: <Headphones className="w-6 h-6" />,
     description: "Dalla prima idea alla traccia completa. Mi occupo di tutto il processo produttivo: composizione, arrangiamento, scelta dei suoni e delle sonorità. Che tu sia un artista emergente con una melodia in testa o un professionista che cerca un sound specifico, ti accompagno in ogni fase della creazione musicale.",
     media: [
