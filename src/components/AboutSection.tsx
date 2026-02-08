@@ -44,17 +44,7 @@ const AboutSection = () => {
         delay: 0.2
       }} className="glass-strong rounded-3xl p-8 md:p-12">
           {/* Highlights */}
-          <div className="flex flex-wrap justify-center gap-4 mb-8">
-            {highlights.map((item, index) => (
-              <div
-                key={index}
-                className="flex items-center gap-2 px-4 py-2 rounded-full bg-primary/20 text-primary"
-              >
-                {item.icon}
-                <span className="text-sm font-medium">{item.text}</span>
-              </div>
-            ))}
-          </div>
+          
 
           {/* Bio text */}
           <div className="text-muted-foreground leading-relaxed space-y-4">
