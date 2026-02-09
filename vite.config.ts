@@ -5,7 +5,11 @@ import { componentTagger } from "lovable-tagger";
 
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }) => ({
-  base: "/sound-craft-studio/",
+  // ✅ base dinamica:
+  // - sviluppo locale: /sound-craft-studio/
+  // - produzione (dominio custom): /
+  base: mode === "development" ? "/sound-craft-studio/" : "/",
+
   server: {
     host: "::",
     port: 8080,
@@ -13,7 +17,12 @@ export default defineConfig(({ mode }) => ({
       overlay: false,
     },
   },
-  plugins: [react(), mode === "development" && componentTagger()].filter(Boolean),
+
+  plugins: [
+    react(),
+    mode === "development" && componentTagger(),
+  ].filter(Boolean),
+
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./src"),
