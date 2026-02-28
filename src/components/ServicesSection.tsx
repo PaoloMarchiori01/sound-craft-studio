@@ -1,4 +1,5 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect, useCallback } from "react";
+import { useSingleMediaPlayer } from "@/hooks/useSingleMediaPlayer";
 import { motion, AnimatePresence } from "framer-motion";
 import { ChevronDown, Music, Mic, Radio, Headphones, Podcast, ChevronLeft, ChevronRight, Play, Pause, MoreHorizontal } from "lucide-react";
 
@@ -123,6 +124,14 @@ const MediaPlayer = ({ media }: { media: { type: string; title: string; src: str
   const audioRef = useRef<HTMLAudioElement>(null);
   const progressBarRef = useRef<HTMLDivElement>(null);
 
+  const pauseSelf = useCallback(() => {
+    if (audioRef.current) {
+      audioRef.current.pause();
+      setIsPlaying(false);
+    }
+  }, []);
+  const { requestPlay } = useSingleMediaPlayer(pauseSelf);
+
   const currentMedia = media[currentIndex];
   const hasAudioSrc = currentMedia.src && currentMedia.src.length > 0;
 
@@ -144,6 +153,7 @@ const MediaPlayer = ({ media }: { media: { type: string; title: string; src: str
     if (isPlaying) {
       audioRef.current.pause();
     } else {
+      requestPlay();
       audioRef.current.play();
     }
     setIsPlaying(!isPlaying);
@@ -200,13 +210,16 @@ const MediaPlayer = ({ media }: { media: { type: string; title: string; src: str
         />
       )}
       
-      <div className="flex items-center justify-between mb-3">
-        <span className="text-sm text-muted-foreground">
+      <div className="flex items-center justify-between gap-2 mb-3 min-w-0">
+        <span className="text-[11px] sm:text-sm text-muted-foreground shrink-0">
           {currentIndex + 1} / {media.length}
         </span>
-        <span className="text-sm font-medium text-foreground">
-          {media[currentIndex].title}
-        </span>
+        <div className="player-title-scroll min-w-0 flex-1 flex justify-center">
+          <div className="player-title-marquee">
+            <span className="text-[11px] sm:text-sm font-medium text-foreground whitespace-nowrap py-0.5 pr-8" title={media[currentIndex].title}>{media[currentIndex].title}</span>
+            <span className="text-[11px] sm:text-sm font-medium text-foreground whitespace-nowrap py-0.5 pr-8" aria-hidden>{media[currentIndex].title}</span>
+          </div>
+        </div>
       </div>
       
       {/* Waveform visualization */}
@@ -286,6 +299,13 @@ const MixingMasteringPlayer = ({ pairs }: { pairs: PrePostPair[] }) => {
   const postAudioRef = useRef<HTMLAudioElement>(null);
   const progressBarRef = useRef<HTMLDivElement>(null);
 
+  const pauseSelf = useCallback(() => {
+    preAudioRef.current?.pause();
+    postAudioRef.current?.pause();
+    setIsPlaying(false);
+  }, []);
+  const { requestPlay } = useSingleMediaPlayer(pauseSelf);
+
   const currentPair = pairs[currentPairIndex];
   const preTrack = currentPair.pre;
   const postTrack = currentPair.post;
@@ -336,6 +356,7 @@ const MixingMasteringPlayer = ({ pairs }: { pairs: PrePostPair[] }) => {
     if (isPlaying) {
       el.pause();
     } else {
+      requestPlay();
       el.currentTime = Math.max(0, sharedTime);
       const dur = el.duration;
       if (Number.isFinite(dur) && dur > 0) setProgress((sharedTime / dur) * 100);
@@ -403,26 +424,29 @@ const MixingMasteringPlayer = ({ pairs }: { pairs: PrePostPair[] }) => {
         />
       )}
 
-      <div className="grid grid-cols-3 items-center gap-2 mb-3">
-        <span className="text-sm text-muted-foreground">
+      <div className="grid grid-cols-3 items-center gap-1 sm:gap-2 mb-3">
+        <span className="text-[11px] sm:text-sm text-muted-foreground">
           {currentPairIndex + 1} / {pairs.length}
         </span>
-        <div className="flex justify-center min-w-0 overflow-hidden">
-          <p className="text-sm font-medium text-foreground truncate text-center max-w-full" title={currentTrack.title}>{currentTrack.title}</p>
+        <div className="player-title-scroll flex justify-center min-w-0">
+          <div className="player-title-marquee">
+            <span className="text-[11px] sm:text-sm font-medium text-foreground whitespace-nowrap py-0.5 pr-8 text-center" title={currentTrack.title}>{currentTrack.title}</span>
+            <span className="text-[11px] sm:text-sm font-medium text-foreground whitespace-nowrap py-0.5 pr-8 text-center" aria-hidden>{currentTrack.title}</span>
+          </div>
         </div>
-        <div className="flex justify-end">
+        <div className="flex justify-end min-w-0">
           <div className="flex rounded-lg overflow-hidden border border-primary/30">
           <button
             type="button"
             onClick={() => activeTrack !== "pre" && switchTrack()}
-            className={`px-4 py-2 text-sm font-medium transition-colors ${activeTrack === "pre" ? "bg-primary text-primary-foreground" : "bg-muted/50 text-muted-foreground hover:bg-muted"}`}
+            className={`px-2 py-1.5 sm:px-4 sm:py-2 text-[11px] sm:text-sm font-medium transition-colors ${activeTrack === "pre" ? "bg-primary text-primary-foreground" : "bg-muted/50 text-muted-foreground hover:bg-muted"}`}
           >
             Pre
           </button>
           <button
             type="button"
             onClick={() => activeTrack !== "post" && switchTrack()}
-            className={`px-4 py-2 text-sm font-medium transition-colors ${activeTrack === "post" ? "bg-primary text-primary-foreground" : "bg-muted/50 text-muted-foreground hover:bg-muted"}`}
+            className={`px-2 py-1.5 sm:px-4 sm:py-2 text-[11px] sm:text-sm font-medium transition-colors ${activeTrack === "post" ? "bg-primary text-primary-foreground" : "bg-muted/50 text-muted-foreground hover:bg-muted"}`}
           >
             Post
           </button>
@@ -488,6 +512,14 @@ const VideoPlayer = ({ media }: { media: { type: string; title: string; src: str
   const videoRef = useRef<HTMLVideoElement>(null);
   const progressBarRef = useRef<HTMLDivElement>(null);
 
+  const pauseSelf = useCallback(() => {
+    if (videoRef.current) {
+      videoRef.current.pause();
+      setIsPlaying(false);
+    }
+  }, []);
+  const { requestPlay } = useSingleMediaPlayer(pauseSelf);
+
   const currentMedia = media[currentIndex];
   const hasVideoSrc = currentMedia.src && currentMedia.src.length > 0;
 
@@ -508,6 +540,7 @@ const VideoPlayer = ({ media }: { media: { type: string; title: string; src: str
     if (isPlaying) {
       videoRef.current.pause();
     } else {
+      requestPlay();
       videoRef.current.play();
     }
     setIsPlaying(!isPlaying);
@@ -561,13 +594,16 @@ const VideoPlayer = ({ media }: { media: { type: string; title: string; src: str
         />
       )}
 
-      <div className="flex items-center justify-between mb-3">
-        <span className="text-sm text-muted-foreground">
+      <div className="flex items-center justify-between gap-2 mb-3 min-w-0">
+        <span className="text-[11px] sm:text-sm text-muted-foreground shrink-0">
           {currentIndex + 1} / {media.length}
         </span>
-        <span className="text-sm font-medium text-foreground">
-          {media[currentIndex].title}
-        </span>
+        <div className="player-title-scroll min-w-0 flex-1 flex justify-center">
+          <div className="player-title-marquee">
+            <span className="text-[11px] sm:text-sm font-medium text-foreground whitespace-nowrap py-0.5 pr-8" title={media[currentIndex].title}>{media[currentIndex].title}</span>
+            <span className="text-[11px] sm:text-sm font-medium text-foreground whitespace-nowrap py-0.5 pr-8" aria-hidden>{media[currentIndex].title}</span>
+          </div>
+        </div>
       </div>
 
       <div className="flex items-center justify-center gap-6">
