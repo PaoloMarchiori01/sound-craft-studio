@@ -17,6 +17,7 @@ const Navigation = () => {
   const navLinks = [
     { href: "#servizi", label: "Servizi" },
     { href: "#chi-sono", label: "Chi Sono" },
+    { href: "#lo-studio", label: "Lo Studio" },
     { href: "#contatti", label: "Contatti" },
   ];
 
@@ -31,11 +32,11 @@ const Navigation = () => {
         initial={{ y: -100 }}
         animate={{ y: 0 }}
         transition={{ duration: 0.6 }}
-        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
+        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 w-full max-w-[100vw] overflow-x-hidden ${
           isScrolled ? "glass-strong py-3" : "py-6"
         }`}
       >
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between w-full min-w-0 max-w-full">
           <a
             href="#"
             onClick={(e) => {

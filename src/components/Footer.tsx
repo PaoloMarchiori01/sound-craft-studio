@@ -1,4 +1,4 @@
-import { Mail, Phone, Instagram, Facebook, Linkedin } from "lucide-react";
+import { Mail, Phone, Instagram, Linkedin } from "lucide-react";
 
 const TikTokIcon = () => (
   <svg className="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
@@ -10,15 +10,14 @@ const Footer = () => {
   const currentYear = new Date().getFullYear();
 
   const socialLinks = [
-    { icon: <Instagram className="w-5 h-5" />, href: "#", label: "Instagram" },
-    { icon: <Facebook className="w-5 h-5" />, href: "#", label: "Facebook" },
-    { icon: <Linkedin className="w-5 h-5" />, href: "#", label: "LinkedIn" },
+    { icon: <Instagram className="w-5 h-5" />, href: "https://www.instagram.com/paolomarchiori_audio/", label: "Instagram" },
+    { icon: <Linkedin className="w-5 h-5" />, href: "https://www.linkedin.com/in/paolo-marchiori-a99799202/", label: "LinkedIn" },
     { icon: <TikTokIcon />, href: "#", label: "TikTok" },
   ];
 
   return (
-    <footer className="border-t border-border/50">
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    <footer className="border-t border-border/50 w-full max-w-[100vw] overflow-x-hidden">
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-12 w-full min-w-0 max-w-full">
         <div className="grid md:grid-cols-3 gap-8 items-center">
           {/* Logo */}
           <div>
@@ -52,6 +51,8 @@ const Footer = () => {
               <a
                 key={index}
                 href={social.href}
+                target={social.href.startsWith("http") ? "_blank" : undefined}
+                rel={social.href.startsWith("http") ? "noopener noreferrer" : undefined}
                 className="p-3 rounded-xl bg-primary/10 hover:bg-primary/20 text-primary transition-colors duration-300"
                 aria-label={social.label}
               >

@@ -3,7 +3,7 @@ import { useState } from "react";
 import { ChevronDown } from "lucide-react";
 const AboutSection = () => {
   const [isExpanded, setIsExpanded] = useState(false);
-  return <section id="chi-sono" className="section-container">
+  return <section id="chi-sono" className="section-container w-full max-w-[100vw] overflow-x-hidden">
       <div className="max-w-4xl mx-auto">
         <motion.div initial={{
         opacity: 0,

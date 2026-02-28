@@ -33,6 +33,10 @@ jobs:
       
       - name: Build
         run: npm run build
+        env:
+          # Supabase: imposta i segreti nel repo GitHub (Settings → Secrets and variables → Actions)
+          VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
+          VITE_SUPABASE_PUBLISHABLE_KEY: ${{ secrets.VITE_SUPABASE_PUBLISHABLE_KEY }}
       
       - name: Setup Pages
         uses: actions/configure-pages@v4

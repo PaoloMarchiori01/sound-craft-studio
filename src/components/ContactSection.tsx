@@ -1,7 +1,8 @@
 import { motion } from "framer-motion";
 import { useState } from "react";
-import { Mail, Phone, Instagram, Facebook, Linkedin, Send, Check, ChevronDown } from "lucide-react";
+import { Mail, Phone, Instagram, Linkedin, Send, Check, ChevronDown } from "lucide-react";
 import { toast } from "sonner";
+import { supabase } from "@/integrations/supabase/client";
 
 const TikTokIcon = ({ className }: { className?: string }) => (
   <svg className={className ?? "w-5 h-5"} viewBox="0 0 24 24" fill="currentColor">
@@ -45,76 +46,89 @@ const ContactSection = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
-    
+
+    const payload = {
+      nome: formData.nome.trim(),
+      cognome: formData.cognome.trim(),
+      email: formData.email.trim(),
+      cellulare: formData.cellulare.trim() || null,
+      servizio: formData.servizio,
+      messaggio: formData.messaggio.trim(),
+    };
+
     try {
-      // Send data to Make.com webhook
-      await fetch(MAKE_WEBHOOK_URL, {
+      // Invia a Make.com (webhook)
+      fetch(MAKE_WEBHOOK_URL, {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: { "Content-Type": "application/json" },
         mode: "no-cors",
-        body: JSON.stringify({
-          nome: formData.nome.trim(),
-          cognome: formData.cognome.trim(),
-          email: formData.email.trim(),
-          cellulare: formData.cellulare.trim() || null,
-          servizio: formData.servizio,
-          messaggio: formData.messaggio.trim(),
-          timestamp: new Date().toISOString(),
-        }),
+        body: JSON.stringify({ ...payload, timestamp: new Date().toISOString() }),
       });
+
+      // Salva anche su Supabase
+      const { error } = await supabase.from("contact_messages").insert({
+        nome: payload.nome,
+        cognome: payload.cognome,
+        email: payload.email,
+        cellulare: payload.cellulare,
+        servizio: payload.servizio,
+        messaggio: payload.messaggio,
+      });
+
+      if (error) {
+        console.error("Supabase contact_messages insert error:", error.message, error.details);
+        throw error;
+      }
 
       setIsSubmitting(false);
       setIsSubmitted(true);
       toast.success("Messaggio inviato con successo! Ti risponderò al più presto.");
-      
-      // Reset after animation
+
       setTimeout(() => {
         setIsSubmitted(false);
         setFormData({ nome: "", cognome: "", email: "", cellulare: "", servizio: "", messaggio: "" });
       }, 3000);
-    } catch (error) {
-      console.error("Error sending form:", error);
+    } catch (err: unknown) {
+      const message = err && typeof err === "object" && "message" in err ? String((err as { message: string }).message) : "";
+      console.error("Error sending form:", err);
       setIsSubmitting(false);
-      toast.error("Errore nell'invio del messaggio. Riprova più tardi.");
+      toast.error(message ? `Errore: ${message}` : "Errore nell'invio del messaggio. Riprova più tardi.");
     }
   };
 
   const socialLinks = [
-    { icon: <Instagram className="w-5 h-5" />, href: "#", label: "Instagram" },
-    { icon: <Facebook className="w-5 h-5" />, href: "#", label: "Facebook" },
-    { icon: <Linkedin className="w-5 h-5" />, href: "#", label: "LinkedIn" },
+    { icon: <Instagram className="w-5 h-5" />, href: "https://www.instagram.com/paolomarchiori_audio/", label: "Instagram" },
+    { icon: <Linkedin className="w-5 h-5" />, href: "https://www.linkedin.com/in/paolo-marchiori-a99799202/", label: "LinkedIn" },
     { icon: <TikTokIcon />, href: "#", label: "TikTok" },
   ];
 
   return (
-    <section id="contatti" className="section-container">
+    <section id="contatti" className="section-container w-full max-w-[100vw] overflow-x-hidden">
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
         transition={{ duration: 0.6 }}
-        className="text-center mb-12"
+        className="text-center mb-12 w-full min-w-0"
       >
-        <h2 className="text-4xl md:text-5xl font-bold mb-6">
+        <h2 className="text-4xl md:text-5xl font-bold mb-6 break-words">
           <span className="text-gradient">Contatti</span>
         </h2>
-        <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
+        <p className="text-muted-foreground text-lg max-w-2xl mx-auto break-words">
           Hai un progetto in mente? Contattami e diamo vita alla tua idea!
         </p>
       </motion.div>
 
-      <div className="max-w-5xl mx-auto grid md:grid-cols-2 gap-8">
+      <div className="max-w-5xl mx-auto grid md:grid-cols-2 gap-8 w-full min-w-0">
         {/* Contact Info */}
         <motion.div
           initial={{ opacity: 0, x: -20 }}
           whileInView={{ opacity: 1, x: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
-          className="space-y-6"
+          className="space-y-6 min-w-0 w-full"
         >
-          <div className="glass-strong rounded-2xl p-8">
+          <div className="glass-strong rounded-2xl p-6 sm:p-8 w-full min-w-0 max-w-full box-border">
             <h3 className="text-2xl font-semibold mb-6">Contatti Rapidi</h3>
             
             <div className="space-y-4">
@@ -122,12 +136,12 @@ const ContactSection = () => {
                 href="mailto:paolomarchiori.audio@gmail.com"
                 className="flex items-center gap-4 p-4 rounded-xl bg-primary/5 border border-primary/10 hover:border-primary/30 transition-all duration-300 group"
               >
-                <div className="p-3 rounded-lg bg-primary/20 text-primary group-hover:scale-110 transition-transform duration-300">
+                <div className="p-3 rounded-lg bg-primary/20 text-primary group-hover:scale-110 transition-transform duration-300 shrink-0">
                   <Mail className="w-5 h-5" />
                 </div>
-                <div>
-                  <p className="text-sm text-muted-foreground">Email</p>
-                  <p className="font-medium">paolomarchiori.audio@gmail.com</p>
+                <div className="min-w-0">
+                  <p className="text-xs md:text-sm text-muted-foreground">Email</p>
+                  <p className="text-xs md:text-base font-medium">paolomarchiori.audio@gmail.com</p>
                 </div>
               </a>
 
@@ -135,12 +149,12 @@ const ContactSection = () => {
                 href="tel:+393515372933"
                 className="flex items-center gap-4 p-4 rounded-xl bg-primary/5 border border-primary/10 hover:border-primary/30 transition-all duration-300 group"
               >
-                <div className="p-3 rounded-lg bg-primary/20 text-primary group-hover:scale-110 transition-transform duration-300">
+                <div className="p-3 rounded-lg bg-primary/20 text-primary group-hover:scale-110 transition-transform duration-300 shrink-0">
                   <Phone className="w-5 h-5" />
                 </div>
-                <div>
-                  <p className="text-sm text-muted-foreground">Cellulare</p>
-                  <p className="font-medium">+39 351 537 2933</p>
+                <div className="min-w-0">
+                  <p className="text-xs md:text-sm text-muted-foreground">Cellulare</p>
+                  <p className="text-xs md:text-base font-medium">+39 351 537 2933</p>
                 </div>
               </a>
 
@@ -150,12 +164,12 @@ const ContactSection = () => {
                 rel="noopener noreferrer"
                 className="flex items-center gap-4 p-4 rounded-xl bg-primary/5 border border-primary/10 hover:border-primary/30 transition-all duration-300 group"
               >
-                <div className="p-3 rounded-lg bg-primary/20 text-primary group-hover:scale-110 transition-transform duration-300">
+                <div className="p-3 rounded-lg bg-primary/20 text-primary group-hover:scale-110 transition-transform duration-300 shrink-0">
                   <WhatsAppIcon className="w-5 h-5" />
                 </div>
-                <div>
-                  <p className="text-sm text-muted-foreground">WhatsApp</p>
-                  <p className="font-medium">Apri chat</p>
+                <div className="min-w-0">
+                  <p className="text-xs md:text-sm text-muted-foreground">WhatsApp</p>
+                  <p className="text-xs md:text-base font-medium">Apri chat</p>
                 </div>
               </a>
             </div>
@@ -168,6 +182,8 @@ const ContactSection = () => {
                   <motion.a
                     key={index}
                     href={social.href}
+                    target={social.href.startsWith("http") ? "_blank" : undefined}
+                    rel={social.href.startsWith("http") ? "noopener noreferrer" : undefined}
                     className="glass-button p-3 rounded-xl"
                     whileHover={{ scale: 1.1 }}
                     whileTap={{ scale: 0.95 }}
@@ -187,11 +203,12 @@ const ContactSection = () => {
           whileInView={{ opacity: 1, x: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
+          className="min-w-0 w-full"
         >
-          <form onSubmit={handleSubmit} className="glass-strong rounded-2xl p-8">
-            <h3 className="text-2xl font-semibold mb-6">Invia un Messaggio</h3>
+          <form onSubmit={handleSubmit} className="glass-strong rounded-2xl p-6 sm:p-8 w-full min-w-0 max-w-full box-border">
+            <h3 className="text-2xl font-semibold mb-6 break-words">Invia un Messaggio</h3>
             
-            <div className="grid sm:grid-cols-2 gap-4 mb-4">
+            <div className="grid sm:grid-cols-2 gap-4 mb-4 w-full min-w-0">
               <div className="relative">
                 <label htmlFor="nome" className="block text-sm text-muted-foreground mb-2">
                   Nome *
@@ -204,7 +221,7 @@ const ContactSection = () => {
                   onChange={handleChange}
                   required
                   maxLength={100}
-                  className="input-glass w-full"
+                  className="input-glass w-full min-w-0 max-w-full box-border"
                   placeholder="Il tuo nome"
                 />
               </div>
@@ -220,7 +237,7 @@ const ContactSection = () => {
                   onChange={handleChange}
                   required
                   maxLength={100}
-                  className="input-glass w-full"
+                  className="input-glass w-full min-w-0 max-w-full box-border"
                   placeholder="Il tuo cognome"
                 />
               </div>
@@ -239,7 +256,7 @@ const ContactSection = () => {
                   onChange={handleChange}
                   required
                   maxLength={255}
-                  className="input-glass w-full"
+                  className="input-glass w-full min-w-0 max-w-full box-border"
                   placeholder="email@esempio.com"
                 />
               </div>
@@ -254,7 +271,7 @@ const ContactSection = () => {
                   value={formData.cellulare}
                   onChange={handleChange}
                   maxLength={20}
-                  className="input-glass w-full"
+                  className="input-glass w-full min-w-0 max-w-full box-border"
                   placeholder="+39 XXX XXX XXXX"
                 />
               </div>
@@ -271,7 +288,7 @@ const ContactSection = () => {
                   value={formData.servizio}
                   onChange={handleChange}
                   required
-                  className="input-glass w-full appearance-none cursor-pointer pr-10"
+                  className="input-glass w-full min-w-0 max-w-full box-border appearance-none cursor-pointer pr-10"
                 >
                   <option value="" disabled>Seleziona un servizio</option>
                   {serviceOptions.map((option) => (
@@ -296,7 +313,7 @@ const ContactSection = () => {
                 required
                 maxLength={2000}
                 rows={5}
-                className="input-glass w-full resize-none"
+                className="input-glass w-full min-w-0 max-w-full box-border resize-none"
                 placeholder="Raccontami del tuo progetto..."
               />
             </div>
