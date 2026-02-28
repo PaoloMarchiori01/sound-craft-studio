@@ -76,7 +76,7 @@ const AboutSection = () => {
                   </p>
                   
                   <p>
-                    In seguito ho lavorato come assistente in diversi studi, stabilizzandomi 
+                    Successivamente, ho lavorato come assistente in diversi studi, stabilizzandomi 
                     presso <span className="text-primary font-medium">L'n'R Production</span>, 
                     studio ed etichetta discografica di Luca Rustici, dove ho avuto l'opportunità 
                     di entrare in contatto con artisti di fama nazionale e di ampliare le mie 

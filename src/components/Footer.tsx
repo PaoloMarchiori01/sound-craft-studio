@@ -18,7 +18,7 @@ const Footer = () => {
   return (
     <footer className="border-t border-border/50 w-full max-w-[100vw] overflow-x-hidden">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-12 w-full min-w-0 max-w-full">
-        <div className="grid md:grid-cols-3 gap-8 items-center">
+        <div className="grid md:grid-cols-3 gap-8 items-center justify-items-center text-center">
           {/* Logo */}
           <div>
             <h3 className="text-2xl font-bold">
@@ -46,7 +46,7 @@ const Footer = () => {
           </div>
 
           {/* Social */}
-          <div className="flex justify-end gap-3">
+          <div className="flex justify-center gap-3">
             {socialLinks.map((social, index) => (
               <a
                 key={index}
@@ -63,7 +63,7 @@ const Footer = () => {
         </div>
 
         <div className="mt-8 pt-8 border-t border-border/30 text-center text-sm text-muted-foreground">
-          <p>© {currentYear} Paolo Marchiori. Tutti i diritti riservati.</p>
+          <p>© {currentYear} PMAudio. Tutti i diritti riservati.</p>
         </div>
       </div>
     </footer>

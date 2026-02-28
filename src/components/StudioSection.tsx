@@ -57,9 +57,10 @@ const StudioSection = () => {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center">
             {/* Testo a sinistra */}
             <div className="order-2 lg:order-1 space-y-4 text-muted-foreground leading-relaxed">
+            <p>I servizi di mixing, mastering e le registrazioni in studio vengono svolti negli spazi di <span className="text-primary font-medium">L'n'R Productions</span>.</p>
+
             <p>
-              La <span className="text-primary font-medium">L'n'R </span>
-              nasce nel 2004 come <span className="text-primary font-medium">studio di registrazione, label
+              La L'n'R nasce nel 2004 come <span className="text-primary font-medium">studio di registrazione, label
               indipendente e publishing</span> sotto la guida di <span className="text-primary font-medium">Luca Rustici</span> per dare
               spazio alla musica e ai progetti che in altro modo non sarebbero
               stati mai realizzati.

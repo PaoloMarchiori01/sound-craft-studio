@@ -172,6 +172,21 @@
     );
   }
 
+  /* Titoli player: marquee automatico destra → sinistra in loop */
+  .player-title-scroll {
+    overflow: hidden;
+    min-width: 0;
+  }
+  .player-title-marquee {
+    display: inline-flex;
+    flex-shrink: 0;
+    animation: player-title-marquee 18s linear infinite;
+  }
+  @keyframes player-title-marquee {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+  }
+
   /* Form input glass */
   .input-glass {
     @apply w-full backdrop-blur-md border rounded-xl px-4 py-3 transition-all duration-300;
